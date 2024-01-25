@@ -18,6 +18,13 @@ then
     exit1
 fi
 
+if [ $USERIDROBO -ne 0 ]
+then
+    echo "roboshop found"
+else
+    echo "roboshop not found"
+fi
+
 VALIDATE(){
 
     if [ $1 -ne 0 ]
@@ -29,13 +36,6 @@ VALIDATE(){
     if
 
 }
-
-if [ $USERIDROBO -ne 0 ]
-then
-    echo "roboshop found"
-else
-    echo "roboshop not found"
-fi
 
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGFILE
 VALIDATE $? "Downloading the Nodejs source"
