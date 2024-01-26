@@ -20,9 +20,9 @@ fi
 
 if [ $USERIDROBO -ne 0 ]
 then
-    echo "roboshop found"
-else
     echo "roboshop not found"
+else
+    echo "roboshop  found"
 fi
 
 VALIDATE(){
@@ -34,7 +34,6 @@ VALIDATE(){
     else
         echo -e "Installing $2 .. $G SUCCESS $N"
     if
-
 }
 
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGFILE
