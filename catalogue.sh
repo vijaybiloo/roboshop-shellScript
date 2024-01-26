@@ -53,14 +53,15 @@ if [ -d $DIR ]
 then
     SKIP "creating app dir"
 else
-    mkdir /app &>> $LOGFILE
+    cd /opt &>> $LOGFILE
+    mkdir /$DIR &>> $LOGFILE
     VALIDATE $? "creating app dir"
 fi
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd $DIR &>> $LOGFILE
+cd /opt/$DIR &>> $LOGFILE
 VALIDATE $? "changing directory to app"
 
 yum install zip -y &>> $LOGFILE
