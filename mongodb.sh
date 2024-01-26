@@ -27,7 +27,7 @@ VALIDATE(){
     fi
 }
 
-cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo %>> $LOGFILE
+cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
 VALIDATE $? "Copying mongo.repo"
 
 yum install mongodb-org -y &>> $LOGFILE
