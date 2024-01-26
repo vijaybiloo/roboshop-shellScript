@@ -6,6 +6,9 @@ SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
+USERIDROBO=$(id -u roboshop)
+DIR=$app
+
 R="\e[31m"
 G="\e[32m"
 Y="\e[33m"
@@ -27,16 +30,30 @@ VALIDATE(){
     fi
 }
 
+SKIP(){
+	echo -e "$1 Exist... $Y SKIPPING $N"
+}
+
+if [ $USERIDROBO -ne 0 ]
+then
+    SKIP "roboshop user already exists"
+else
+    useradd roboshop &>> $LOGFILE
+    VALIDATE $? "Creating roboshop user"
+fi
+
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGFILE
 VALIDATE $? "Downloading the Nodejs source"
 
 yum install nodejs -y &>> $LOGFILE
 VALIDATE $? "Installing nodejs"
 
-useradd roboshop &>> $LOGFILE
-VALIDATE $? "Creating roboshop user"
 
-mkdir /app &>> $LOGFILE
+if [ -d /home/vijay/roboshop-documentation/tmp/$DIR ]
+    SKIP "creating app dir"
+else
+    mkdir /app &>> $LOGFILE
+    VALIDATE $? "creating app dir"
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
 VALIDATE $? "Downloading catalogue software"
