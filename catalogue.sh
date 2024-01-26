@@ -34,17 +34,10 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>> $LOGFILE
 VALIDATE $? "Installing nodejs"
 
-USERIDROBO=$(id -u roboshop)
-if [ $USERIDROBO -ne 0 ]
-then
-    echo "roboshop no such user"
-else
-    echo "roboshop user found"
-fi
 useradd roboshop &>> $LOGFILE
 VALIDATE $? "Creating roboshop user"
 
-mkdir /app
+mkdir /app &>> $LOGFILE
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
 VALIDATE $? "Downloading catalogue software"
