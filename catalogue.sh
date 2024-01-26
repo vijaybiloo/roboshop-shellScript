@@ -18,7 +18,6 @@ then
 fi
 
 VALIDATE(){
-
     if [ $1 -ne 0 ]
     then
         echo -e "Installing $2 .. $R FAILURE $N"
@@ -27,6 +26,14 @@ VALIDATE(){
         echo -e "Installing $2 .. $G SUCCESS $N"
     if
 }
+
+USERIDROBO=$(id -u roboshop)
+if [ $USERIDROBO -ne 0 ]
+then
+    echo "roboshop no such user"
+else
+    echo "roboshop user found"
+fi
 
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGFILE
 VALIDATE $? "Downloading the Nodejs source"
