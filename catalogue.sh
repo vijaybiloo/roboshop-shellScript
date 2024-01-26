@@ -1,7 +1,7 @@
 #!/bin/bash
 
-USERID=$(du -u)
-USERIDROBO=$(du -u roboshop)
+USERID=$(id -u)
+USERIDROBO=$(id -u roboshop)
 DATE=$(date +%F:%H:%M:%S)
 SCRIPT=$0
 LOGDIR=/tmp
