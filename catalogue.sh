@@ -70,6 +70,8 @@ VALIDATE $? "Installing zip"
 unzip /tmp/catalogue.zip &>> $LOGFILE
 VALIDATE $? "unziping catalogue"
 
+pwd
+
 npm install
 
 cp /home/vijay/roboshop-documentation/catalogue.service /etc/systemd/system/catalogue.service &>> $LOGFILE
