@@ -54,6 +54,7 @@ if [ -d /home/vijay/roboshop-documentation/tmp/$DIR ]
 else
     mkdir /app &>> $LOGFILE
     VALIDATE $? "creating app dir"
+fi
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
 VALIDATE $? "Downloading catalogue software"
