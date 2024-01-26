@@ -50,6 +50,7 @@ VALIDATE $? "Installing nodejs"
 
 
 if [ -d $DIR ]
+then
     SKIP "creating app dir"
 else
     mkdir /app &>> $LOGFILE
