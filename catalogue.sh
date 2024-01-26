@@ -49,7 +49,7 @@ yum install nodejs -y &>> $LOGFILE
 VALIDATE $? "Installing nodejs"
 
 
-if [ -d /home/vijay/roboshop-documentation/tmp/$DIR ]
+if [ -d $DIR ]
     SKIP "creating app dir"
 else
     mkdir /app &>> $LOGFILE
