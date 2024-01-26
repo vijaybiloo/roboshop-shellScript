@@ -1,7 +1,6 @@
 #!/bin/bash
 
 USERID=$(id -u)
-USERIDROBO=$(id -u roboshop)
 DATE=$(date +%F:%H:%M:%S)
 SCRIPT=$0
 LOGDIR=/tmp
@@ -16,13 +15,6 @@ if [ $USERID -ne 0 ]
 then 
     echo "You should be the root user to execute this command"
     exit1
-fi
-
-if [ $USERIDROBO -ne 0 ]
-then
-    echo "roboshop not found"
-else
-    echo "roboshop  found"
 fi
 
 VALIDATE(){
@@ -42,7 +34,13 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>> $LOGFILE
 VALIDATE $? "Installing nodejs"
 
-
+USERIDROBO=$(id -u roboshop)
+if [ $USERIDROBO -ne 0 ]
+then
+    echo "roboshop no such user"
+else
+    echo "roboshop user found"
+fi
 useradd roboshop &>> $LOGFILE
 VALIDATE $? "Creating roboshop user"
 
