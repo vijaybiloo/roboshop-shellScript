@@ -7,7 +7,6 @@ LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
 USERIDROBO=$(id -u roboshop)
-DIR=$app
 
 R="\e[31m"
 G="\e[32m"
@@ -49,14 +48,14 @@ yum install nodejs -y &>> $LOGFILE
 VALIDATE $? "Installing nodejs"
 
 cd /opt &>> $LOGFILE
-mkdir /$DIR &>> $LOGFILE
+mkdir /app &>> $LOGFILE
 VALIDATE $? "creating app dir"
 
-if [ -d $DIR ]
+if [ -d app ]
 then
     SKIP "creating app dir"
 else
-   echo "Warning: '$DIR' NOT found"
+   echo "Warning: 'app' NOT found"
 fi
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
