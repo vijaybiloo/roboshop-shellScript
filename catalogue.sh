@@ -55,6 +55,8 @@ VALIDATE $? "creating app dir"
 if [ -d $DIR ]
 then
     SKIP "creating app dir"
+else
+   echo "Warning: '$DIR' NOT found"
 fi
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
