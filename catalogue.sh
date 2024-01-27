@@ -7,6 +7,7 @@ LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
 USERIDROBO=$(id -u roboshop)
+DIR=$app
 
 R="\e[31m"
 G="\e[32m"
@@ -47,24 +48,24 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>> $LOGFILE
 VALIDATE $? "Installing nodejs"
 
-if [ -d app ]
+if [ -d $DIR ]
 then
     SKIP "creating app dir"
 else
-    mkdir /opt/app &>> $LOGFILE
+    mkdir /opt/$DIR &>> $LOGFILE
     VALIDATE $? "creating app dir"
 fi
 
-curl -o /opt/app/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
+curl -o /opt/$DIR/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd /opt/app &>> $LOGFILE
+cd /opt/$DIR &>> $LOGFILE
 VALIDATE $? "changing directory to app"
 
 yum install zip -y &>> $LOGFILE
 VALIDATE $? "Installing zip"
 
-unzip /opt/app/catalogue.zip &>> $LOGFILE
+unzip /opt/$DIR/catalogue.zip &>> $LOGFILE
 VALIDATE $? "unziping catalogue"
 
 npm install
@@ -87,5 +88,5 @@ VALIDATE $? "Copying the file mongo.repo"
 yum install mongodb-org-shell -y &>> $LOGFILE
 VALIDATE $? "Installing mongo-org-shell"
 
-mongo --host 10.160.0.7 </opt/app/schema/catalogue.js &>> $LOGFILE
+mongo --host 10.160.0.7 </opt/$DIR/schema/catalogue.js &>> $LOGFILE
 VALIDATE $? "Loading schema"
