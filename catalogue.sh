@@ -47,15 +47,12 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>> $LOGFILE
 VALIDATE $? "Installing nodejs"
 
-cd /opt &>> $LOGFILE
-mkdir /app &>> $LOGFILE
-VALIDATE $? "creating app dir"
-
 if [ -d app ]
 then
     SKIP "creating app dir"
 else
-   echo "Warning: 'app' NOT found"
+    mkdir /opt/app &>> $LOGFILE
+    VALIDATE $? "creating app dir"
 fi
 
 curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
