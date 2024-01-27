@@ -55,16 +55,16 @@ else
     VALIDATE $? "creating app dir"
 fi
 
-curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
+curl -o /opt/app/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd /opt/$DIR &>> $LOGFILE
+cd /opt/app &>> $LOGFILE
 VALIDATE $? "changing directory to app"
 
 yum install zip -y &>> $LOGFILE
 VALIDATE $? "Installing zip"
 
-unzip /tmp/catalogue.zip &>> $LOGFILE
+unzip /opt/app/catalogue.zip &>> $LOGFILE
 VALIDATE $? "unziping catalogue"
 
 npm install
@@ -87,5 +87,5 @@ VALIDATE $? "Copying the file mongo.repo"
 yum install mongodb-org-shell -y &>> $LOGFILE
 VALIDATE $? "Installing mongo-org-shell"
 
-mongo --host 10.160.0.7 </app/schema/catalogue.js &>> $LOGFILE
+mongo --host 10.160.0.7 </opt/app/schema/catalogue.js &>> $LOGFILE
 VALIDATE $? "Loading schema"
