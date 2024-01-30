@@ -7,7 +7,7 @@ LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
 USERIDROBO=$(id -u roboshop)
-DIR=$app
+DIR=/app
 
 R="\e[31m"
 G="\e[32m"
@@ -34,59 +34,60 @@ SKIP(){
 	echo -e "$1 Exist... $Y SKIPPING $N"
 }
 
-if [ $USERIDROBO -ne 0 ]
+if [ $USERIDROBO -e 0 ]
 then
     SKIP "roboshop user already exists"
 else
-    useradd roboshop &>> $LOGFILE
+    useradd roboshop &>>$LOGFILE
     VALIDATE $? "Creating roboshop user"
 fi
 
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>> $LOGFILE
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
 VALIDATE $? "Downloading the Nodejs source"
 
-yum install nodejs -y &>> $LOGFILE
+yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing nodejs"
 
-if [ -d $DIR ]
+if [ ! -d $DIR ]
 then
     SKIP "creating app dir"
 else
-    mkdir /opt/$DIR &>> $LOGFILE
+    mkdir /opt/$DIR &>>$LOGFILE
     VALIDATE $? "creating app dir"
 fi
 
-curl -o /opt/$DIR/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>> $LOGFILE
+curl -o /opt/$DIR/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd /opt/$DIR &>> $LOGFILE
+cd /opt/$DIR &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-yum install zip -y &>> $LOGFILE
+yum install zip -y &>>$LOGFILE
 VALIDATE $? "Installing zip"
 
-unzip /opt/$DIR/catalogue.zip &>> $LOGFILE
+unzip /opt/$DIR/catalogue.zip &>>$LOGFILE
 VALIDATE $? "unziping catalogue"
 
-npm install
+npm install &>>$LOGFILE
+VALIDATE $? "Installing dependencies"
 
-cp /home/vijay/roboshop-documentation/catalogue.service /etc/systemd/system/catalogue.service &>> $LOGFILE
+cp /home/vijay/roboshop-documentation/catalogue.service /etc/systemd/system/catalogue.service &>>$LOGFILE
 VALIDATE $? "Copying the file catalogue.service"
 
-systemctl daemon-reload &>> $LOGFILE
+systemctl daemon-reload &>>$LOGFILE
 VALIDATE $? "Reloading Daemon"
 
-systemctl enable catalogue &>> $LOGFILE
+systemctl enable catalogue &>>$LOGFILE
 VALIDATE $? "Enabling catalogue"
 
-systemctl start catalogue &>> $LOGFILE
+systemctl start catalogue &>>$LOGFILE
 VALIDATE $? "Starting catalogue"
 
-cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE 
+cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
 VALIDATE $? "Copying the file mongo.repo"
 
-yum install mongodb-org-shell -y &>> $LOGFILE
+yum install mongodb-org-shell -y &>>$LOGFILE
 VALIDATE $? "Installing mongo-org-shell"
 
-mongo --host 10.160.0.7 </opt/$DIR/schema/catalogue.js &>> $LOGFILE
+mongo --host 10.160.0.7 </opt/$DIR/schema/catalogue.js &>>$LOGFILE
 VALIDATE $? "Loading schema"

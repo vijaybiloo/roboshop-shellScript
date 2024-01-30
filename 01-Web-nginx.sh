@@ -29,20 +29,20 @@ VALIDATE(){
 
 }
 
-yum install nginx -y &>> $LOGFILE
+yum install nginx -y &>>$LOGFILE
 VALIDATE $? "Installing Nginx"
 
-systemctl enable nginx &>> $LOGFILE
+systemctl enable nginx &>>$LOGFILE
 VALIDATE $? "Enabling Nginx"
 
-systemctl start nginx &>> $LOGFILE
+systemctl start nginx &>>$LOGFILE
 VALIDATE $? "Starting Nginx"
 
-curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip &>> $LOGFILE
+curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip &>>$LOGFILE
 VALIDATE $? "Downloading Roboshop-software"
 
-cd /usr/share/nginx/html &>> $LOGFILE
+cd /usr/share/nginx/html &>>$LOGFILE
 
-cp /home/vijay/roboshop-documentation/roboshop.conf  /etc/nginx/default.d/roboshop.conf &>> $LOGFILE
+cp /home/vijay/roboshop-documentation/roboshop.conf  /etc/nginx/default.d/roboshop.conf &>>$LOGFILE
 
-systemctl restart nginx &>> $LOGFILE
+systemctl restart nginx &>>$LOGFILE
