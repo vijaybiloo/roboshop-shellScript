@@ -31,7 +31,7 @@ cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>
 VALIDATE $? "Copying mongo.repo"
 
 yum install mongodb-org -y &>> $LOGFILE
-VALIDATE $? "installing mongodb-org"
+VALIDATE $? "Installing mongodb-org"
 
 systemctl enable mongod &>> $LOGFILE
 VALIDATE $? "Enabling mongod"
