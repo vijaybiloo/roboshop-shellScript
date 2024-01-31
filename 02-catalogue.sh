@@ -42,6 +42,9 @@ else
     VALIDATE $? "Creating roboshop user"
 fi
 
+yum install zip -y &>>$LOGFILE
+VALIDATE $? "Installing zip"
+
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
 VALIDATE $? "Downloading the Nodejs source"
 
