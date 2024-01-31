@@ -29,6 +29,9 @@ VALIDATE(){
 
 }
 
+yum install zip -y &>>$LOGFILE
+VALIDATE $? "Installing zip"
+
 yum install nginx -y &>>$LOGFILE
 VALIDATE $? "Installing Nginx"
 
@@ -38,11 +41,20 @@ VALIDATE $? "Enabling Nginx"
 systemctl start nginx &>>$LOGFILE
 VALIDATE $? "Starting Nginx"
 
-curl -o /tmp/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip &>>$LOGFILE
+rm -rf /usr/share/nginx/html/*
+VALIDATE $? "Removing defalut files"
+
+curl -o /opt/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip &>>$LOGFILE
 VALIDATE $? "Downloading Roboshop-software"
 
 cd /usr/share/nginx/html &>>$LOGFILE
+VALIDATE $? "changing the directory to html"
+
+unzip /opt/web.zip &>>$LOGFILE
+VALIDATE $? "unziping the roboshop zip file"
 
 cp /home/vijay/roboshop-documentation/roboshop.conf  /etc/nginx/default.d/roboshop.conf &>>$LOGFILE
+VALIDATE $? "Coping the roboshop.conf"
 
 systemctl restart nginx &>>$LOGFILE
+VALIDATE $? "Restarting nginx"
