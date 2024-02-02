@@ -7,7 +7,6 @@ LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
 IDROBO=$(id -u roboshop)
-DIR=/app
 
 R="\e[31m"
 G="\e[32m"
@@ -19,6 +18,16 @@ then
     echo "You should be the root user to execute this command"
     exit1
 fi
+
+DIRECTORY(){
+    if [ -d /opt/app ]
+    then 
+        echo -e "$R app Exists $N"
+    else echo "$G app Not found $N"
+fi
+
+}
+
 
 VALIDATE(){
     if [ $1 -ne 0 ]
@@ -51,21 +60,19 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing nodejs"
 
-[ -d ¨$DIR¨ ]&&echo ¨exists¨||echo ¨not exists¨ &>>$LOGFILE
+mkdir /opt/app
+DIRECTORY $? "app dir not exists hence creating it"
 
-mkdir /opt/$DIR
-VALIDATE $? "app dir not exists hence creating it"
-
-curl -o /opt/$DIR/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
+curl -o /opt/app/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd /opt/$DIR &>>$LOGFILE
+cd /opt/app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
 yum install zip -y &>>$LOGFILE
 VALIDATE $? "Installing zip"
 
-unzip /opt/$DIR/catalogue.zip &>>$LOGFILE
+unzip /opt/app/catalogue.zip &>>$LOGFILE
 VALIDATE $? "unziping catalogue"
 
 npm install &>>$LOGFILE
@@ -89,5 +96,5 @@ VALIDATE $? "Copying the file mongo.repo"
 yum install mongodb-org-shell -y &>>$LOGFILE
 VALIDATE $? "Installing mongo-org-shell"
 
-mongo --host 10.160.0.2 </opt/$DIR/schema/catalogue.js &>>$LOGFILE
+mongo --host 10.160.0.2 </opt/app/schema/catalogue.js &>>$LOGFILE
 VALIDATE $? "Loading schema"
