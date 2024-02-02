@@ -50,24 +50,24 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing nodejs"
 
-if [ -d /opt/app ]
+if [ -d /app ]
 then
     SKIP  "app already Exists"
 else
-    mkdir /opt/app
+    mkdir /app
     VALIDATE $? "app dir not exists hence creating it"
 fi
 
-curl -o /opt/app/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
+curl -o /opt/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd /opt/app &>>$LOGFILE
+cd /app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
 yum install zip -y &>>$LOGFILE
 VALIDATE $? "Installing zip"
 
-unzip /opt/app/catalogue.zip &>>$LOGFILE
+unzip /opt/catalogue.zip &>>$LOGFILE
 VALIDATE $? "unziping catalogue"
 
 npm install &>>$LOGFILE
@@ -91,5 +91,5 @@ VALIDATE $? "Copying the file mongo.repo"
 yum install mongodb-org-shell -y &>>$LOGFILE
 VALIDATE $? "Installing mongo-org-shell"
 
-mongo --host 10.160.0.2 </opt/app/schema/catalogue.js &>>$LOGFILE
+mongo --host 10.160.0.2 </app/schema/catalogue.js &>>$LOGFILE
 VALIDATE $? "Loading schema"
