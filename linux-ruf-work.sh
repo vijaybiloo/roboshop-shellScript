@@ -50,9 +50,13 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing nodejs"
 
-if [ -d /opp/app ]; then echo 'Exists'; else echo 'Not found'; fi
-mkdir /opt/app
-DIRECTORY $? "app dir not exists hence creating it"
+if [ -d /opt/app ]
+then
+    SKIP  "app already Exists"
+else
+    mkdir /opt/app
+    VALIDATE $? "app dir not exists hence creating it"
+fi
 
 curl -o /opt/app/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
 VALIDATE $? "Downloading catalogue software"
