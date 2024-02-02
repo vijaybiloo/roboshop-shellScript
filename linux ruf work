@@ -6,7 +6,7 @@ SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
-USERIDROBO=$(id -u roboshop)
+IDROBO=$(id -u roboshop)
 DIR=/app
 
 R="\e[31m"
@@ -34,7 +34,7 @@ SKIP(){
 	echo -e "$1 Exist... $Y SKIPPING $N"
 }
 
-if [ $USERIDROBO -ne 0 ]
+if [ $IDROBO -ne 0 ]
 then
     SKIP "roboshop user already exists"
 else
@@ -51,9 +51,10 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing nodejs"
 
-[ -d ¨$DIR¨ ]&&echo ¨exists¨||echo ¨not exists¨
+[ -d ¨$DIR¨ ]&&echo ¨exists¨||echo ¨not exists¨ &>>$LOGFILE
 
 mkdir /opt/$DIR
+VALIDATE $? "app dir not exists hence creating it"
 
 curl -o /opt/$DIR/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
 VALIDATE $? "Downloading catalogue software"
