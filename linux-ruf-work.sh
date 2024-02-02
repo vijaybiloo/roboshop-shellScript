@@ -19,16 +19,6 @@ then
     exit1
 fi
 
-DIRECTORY(){
-    if [ -d /opt/app ]
-    then 
-        echo -e "$R app Exists $N"
-    else echo "$G app Not found $N"
-fi
-
-}
-
-
 VALIDATE(){
     if [ $1 -ne 0 ]
     then
@@ -60,6 +50,7 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing nodejs"
 
+if [ -d /opp/app ]; then echo 'Exists'; else echo 'Not found'; fi
 mkdir /opt/app
 DIRECTORY $? "app dir not exists hence creating it"
 
