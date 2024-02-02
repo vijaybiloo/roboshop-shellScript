@@ -54,14 +54,14 @@ if [ -d /app ]
 then
     SKIP  "app already Exists"
 else
-    mkdir /app
+    mkdir /tmp/app
     VALIDATE $? "app dir not exists hence creating it"
 fi
 
 curl -o /opt/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd /app &>>$LOGFILE
+cd /tmp/app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
 yum install zip -y &>>$LOGFILE
@@ -91,5 +91,5 @@ VALIDATE $? "Copying the file mongo.repo"
 yum install mongodb-org-shell -y &>>$LOGFILE
 VALIDATE $? "Installing mongo-org-shell"
 
-mongo --host 10.160.0.2 </app/schema/catalogue.js &>>$LOGFILE
+mongo --host 10.160.0.2 </tmp/app/schema/catalogue.js &>>$LOGFILE
 VALIDATE $? "Loading schema"
