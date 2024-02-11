@@ -1,0 +1,93 @@
+#!/bin/bash
+
+USERID=$(id -u)
+DATE=$(date +%F:%H:%M:%S)
+SCRIPT=$0
+LOGDIR=/tmp
+LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
+
+IDROBO=$(id -u roboshop)
+
+R="\e[31m"
+G="\e[32m"
+Y="\e[33m"
+N="\e[0m"
+
+if [ $USERID -ne 0 ]
+then 
+    echo "You should be the root user to execute this command"
+    exit1
+fi
+
+VALIDATE(){
+    if [ $1 -ne 0 ]
+    then
+        echo -e "$2 ....$R FAILURE $N"
+        exit 1
+    else
+        echo -e "$2 ....$G SUCCES $N"
+    fi
+}
+
+SKIP(){
+	echo -e "$1 Exist... $Y SKIPPING $N"
+}
+
+if [ $IDROBO -ne 0 ]
+then
+    SKIP "roboshop user already exists"
+else
+    useradd roboshop &>>$LOGFILE
+    VALIDATE $? "Creating roboshop user"
+fi
+
+yum install maven -y &>>$LOGFILE
+VALIDATE $? "Installing mavan"
+
+yum install zip -y &>>$LOGFILE
+VALIDATE $? "Installing zip"
+
+
+if [ -d /app ]
+then
+    SKIP  "Creating directory app skipping because app directory already Exists"
+else
+    mkdir /opt/app &>>$LOGFILE
+    VALIDATE $? "app directory not exists hence Creating it"
+fi
+
+curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>>$LOGFILE
+VALIDATE $? "Downloading shipping software"
+
+cd /opt/app &>>$LOGFILE
+VALIDATE $? "changing directory to app"
+
+unzip /tmp/shipping.zip &>>$LOGFILE
+VALIDATE $? "unziping shipping"
+
+mvn clean package &>>$LOGFILE
+VALIDATE $? "Cleaning packages"
+
+mv target/shipping-1.0.jar shipping.jar &>>$LOGFILE
+VALIDATE $? "Moving shipping to jar file"
+
+cp /home/vijay/roboshop-documentation/shipping.service /etc/systemd/system/shipping.service &>>$LOGFILE
+VALIDATE $? "Copying the file shipping.service"
+
+systemctl daemon-reload &>>$LOGFILE
+VALIDATE $? "Reloading Daemon"
+
+systemctl enable shipping &>>$LOGFILE
+VALIDATE $? "Enabling shipping"
+
+systemctl start shipping &>>$LOGFILE
+VALIDATE $? "Starting shipping"
+
+yum install mysql -y &>>$LOGFILE
+VALIDATE $? "Installing mysql"
+
+mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>$LOGFILE
+VALIDATE $? "Loading the schema"
+
+systemctl restart shipping &>>$LOGFILE
+VALIDATE $? "Restating shipping"

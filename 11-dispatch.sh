@@ -33,6 +33,10 @@ SKIP(){
 	echo -e "$1 Exist... $Y SKIPPING $N"
 }
 
+yum install golang -y &>>$LOGFILE
+VALIDATE $? "Installing golang"
+
+
 if [ $IDROBO -ne 0 ]
 then
     SKIP "roboshop user already exists"
@@ -44,49 +48,34 @@ fi
 yum install zip -y &>>$LOGFILE
 VALIDATE $? "Installing zip"
 
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
-VALIDATE $? "Downloading the Nodejs source"
-
-yum install nodejs -y &>>$LOGFILE
-VALIDATE $? "Installing nodejs"
-
 if [ -d /app ]
 then
     SKIP  "Creating directory app skipping because app directory already Exists"
 else
-    mkdir /opt/app
+    mkdir /opt/app &>>$LOGFILE
     VALIDATE $? "app directory not exists hence Creating it"
 fi
 
-curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
-VALIDATE $? "Downloading catalogue software"
+curl -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip &>>$LOGFILE
+VALIDATE $? "Downloading dispatch software"
 
 cd /opt/app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-unzip /tmp/catalogue.zip &>>$LOGFILE
-VALIDATE $? "unziping catalogue"
+unzip /tmp/dispatch.zip &>>$LOGFILE
+VALIDATE $? "unziping dispatch"
 
-npm install &>>$LOGFILE
+go mod init dispatch &>>$LOGFILE && go get &>>$LOGFILE && go build &>>$LOGFILE
 VALIDATE $? "Installing dependencies"
 
-cp /home/vijay/roboshop-documentation/catalogue.service /etc/systemd/system/catalogue.service &>>$LOGFILE
-VALIDATE $? "Copying the file catalogue.service"
+cp /home/vijay/roboshop-documentation/dispatch.service /etc/systemd/system/dispatch.service &>>$LOGFILE
+VALIDATE $? "Copying the file dispatch.service"
 
 systemctl daemon-reload &>>$LOGFILE
 VALIDATE $? "Reloading Daemon"
 
-systemctl enable catalogue &>>$LOGFILE
-VALIDATE $? "Enabling catalogue"
+systemctl enable dispatch &>>$LOGFILE
+VALIDATE $? "Enabling dispatch"
 
-systemctl start catalogue &>>$LOGFILE
-VALIDATE $? "Starting catalogue"
-
-cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
-VALIDATE $? "Copying the file mongo.repo"
-
-yum install mongodb-org-shell -y &>>$LOGFILE
-VALIDATE $? "Installing mongo-org-shell"
-
-mongo --host 10.160.0.2 </tmp/app/schema/catalogue.js &>>$LOGFILE
-VALIDATE $? "Loading schema"
+systemctl start dispatch &>>$LOGFILE
+VALIDATE $? "Starting dispatch"

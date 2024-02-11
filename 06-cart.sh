@@ -52,44 +52,32 @@ VALIDATE $? "Installing nodejs"
 
 if [ -d /app ]
 then
-    SKIP  "app already Exists"
+    SKIP  "Creating directory app skipping because app directory already Exists"
 else
-    mkdir /tmp/app
-    VALIDATE $? "app dir not exists hence creating it"
+    mkdir /opt/app &>>$LOGFILE
+    VALIDATE $? "app directory not exists hence Creating it"
 fi
 
-curl -o /opt/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
-VALIDATE $? "Downloading catalogue software"
+curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip &>>$LOGFILE
+VALIDATE $? "Downloading cart software"
 
-cd /tmp/app &>>$LOGFILE
+cd /opt/app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-yum install zip -y &>>$LOGFILE
-VALIDATE $? "Installing zip"
-
-unzip /opt/catalogue.zip &>>$LOGFILE
+unzip /tmp/cart.zip &>>$LOGFILE
 VALIDATE $? "unziping catalogue"
 
 npm install &>>$LOGFILE
 VALIDATE $? "Installing dependencies"
 
-cp /home/vijay/roboshop-documentation/catalogue.service /etc/systemd/system/catalogue.service &>>$LOGFILE
-VALIDATE $? "Copying the file catalogue.service"
+cp /home/vijay/roboshop-documentation/cart.service /etc/systemd/system/cart.service &>>$LOGFILE
+VALIDATE $? "Copying the file cart.service"
 
 systemctl daemon-reload &>>$LOGFILE
 VALIDATE $? "Reloading Daemon"
 
 systemctl enable catalogue &>>$LOGFILE
-VALIDATE $? "Enabling catalogue"
+VALIDATE $? "Enabling cart"
 
 systemctl start catalogue &>>$LOGFILE
-VALIDATE $? "Starting catalogue"
-
-cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
-VALIDATE $? "Copying the file mongo.repo"
-
-yum install mongodb-org-shell -y &>>$LOGFILE
-VALIDATE $? "Installing mongo-org-shell"
-
-mongo --host 10.160.0.2 </tmp/app/schema/catalogue.js &>>$LOGFILE
-VALIDATE $? "Loading schema"
+VALIDATE $? "Starting cart"

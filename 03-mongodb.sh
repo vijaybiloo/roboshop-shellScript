@@ -27,17 +27,20 @@ VALIDATE(){
     fi
 }
 
-cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>> $LOGFILE
+cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE
 VALIDATE $? "Copying mongo.repo"
 
-yum install mongodb-org -y &>> $LOGFILE
+yum install mongodb-org -y &>>$LOGFILE
 VALIDATE $? "Installing mongodb-org"
 
 systemctl enable mongod &>> $LOGFILE
 VALIDATE $? "Enabling mongod"
 
-sed -i 's/127.0.0.0/0.0.0.0/g' /etc/mongod.conf &>> $LOGFILE
+systemctl start mongod &>>$LOGFILE
+VALIDATE $? "Starting mongod"
+
+sed -i 's/127.0.0.0/0.0.0.0/g' /etc/mongod.conf &>>$LOGFILE
 VALIDATE $? "changing the ip to public"
 
-systemctl restart mongod &>> $LOGFILE
+systemctl restart mongod &>>$LOGFILE
 VALIDATE $? "Restarting mongod"
