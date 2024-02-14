@@ -27,7 +27,7 @@ VALIDATE(){
     fi
 }
 
-cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE
+cp /home/centos/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE
 VALIDATE $? "Copying mongo.repo"
 
 yum install mongodb-org -y &>>$LOGFILE
@@ -39,7 +39,7 @@ VALIDATE $? "Enabling mongod"
 systemctl start mongod &>>$LOGFILE
 VALIDATE $? "Starting mongod"
 
-sed -i 's/127.0.0.0/0.0.0.0/g' /etc/mongod.conf &>>$LOGFILE
+sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf &>>$LOGFILE
 VALIDATE $? "changing the ip to public"
 
 systemctl restart mongod &>>$LOGFILE
