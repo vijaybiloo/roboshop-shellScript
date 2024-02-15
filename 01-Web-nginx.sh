@@ -21,16 +21,13 @@ VALIDATE(){
 
     if [ $1 -ne 0 ]
     then
-        echo -e "Installing $2.. $R FAILURE $N"
+        echo -e "$2.. $R FAILURE $N"
         exit 1
     else
-        echo -e "Installing $2 ..$G SUCCESS $N"
+        echo -e "$2 ..$G SUCCESS $N"
     fi
 
 }
-
-yum install zip -y &>>$LOGFILE
-VALIDATE $? "Installing zip"
 
 yum install nginx -y &>>$LOGFILE
 VALIDATE $? "Installing Nginx"
@@ -42,7 +39,7 @@ systemctl start nginx &>>$LOGFILE
 VALIDATE $? "Starting Nginx"
 
 rm -rf /usr/share/nginx/html/*
-VALIDATE $? "Removing defalut files"
+VALIDATE $? "Removing defalut files from html"
 
 curl -o /opt/web.zip https://roboshop-builds.s3.amazonaws.com/web.zip &>>$LOGFILE
 VALIDATE $? "Downloading Roboshop-software"

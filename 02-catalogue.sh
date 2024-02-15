@@ -6,7 +6,7 @@ SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
-IDROBO=$(id -u roboshop)
+IDROBO=$(id roboshop)
 
 R="\e[31m"
 G="\e[32m"
@@ -16,7 +16,7 @@ N="\e[0m"
 if [ $USERID -ne 0 ]
 then 
     echo "You should be the root user to execute this command"
-    exit1
+    exit 1
 fi
 
 VALIDATE(){
@@ -35,10 +35,11 @@ SKIP(){
 
 if [ $IDROBO -ne 0 ]
 then
-    SKIP "roboshop user already exists"
-else
     useradd roboshop &>>$LOGFILE
     VALIDATE $? "Creating roboshop user"
+else
+    SKIP "roboshop user already exists"
+
 fi
 
 yum install zip -y &>>$LOGFILE
@@ -54,23 +55,23 @@ if [ -d /app ]
 then
     SKIP  "Creating directory app skipping because app directory already Exists"
 else
-    mkdir /opt/app
+    mkdir /app &>>$LOGFILE
     VALIDATE $? "app directory not exists hence Creating it"
 fi
 
-curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
+curl -o /opt/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip &>>$LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd /opt/app &>>$LOGFILE
+cd /app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-unzip /tmp/catalogue.zip &>>$LOGFILE
+unzip /opt/catalogue.zip &>>$LOGFILE
 VALIDATE $? "unziping catalogue"
 
 npm install &>>$LOGFILE
 VALIDATE $? "Installing dependencies"
 
-cp /home/vijay/roboshop-documentation/catalogue.service /etc/systemd/system/catalogue.service &>>$LOGFILE
+cp /home/centos/roboshop-documentation/catalogue.service /etc/systemd/system/catalogue.service &>>$LOGFILE
 VALIDATE $? "Copying the file catalogue.service"
 
 systemctl daemon-reload &>>$LOGFILE
@@ -82,7 +83,7 @@ VALIDATE $? "Enabling catalogue"
 systemctl start catalogue &>>$LOGFILE
 VALIDATE $? "Starting catalogue"
 
-cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
+cp /home/centos/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
 VALIDATE $? "Copying the file mongo.repo"
 
 yum install mongodb-org-shell -y &>>$LOGFILE

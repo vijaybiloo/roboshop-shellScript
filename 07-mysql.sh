@@ -34,7 +34,7 @@ SKIP(){
 yum module disable mysql -y &>>$LOGFILE
 VALIDATE $? "Disabling mysql"
 
-cp /home/vijay/roboshop-documentation/mysql.repo /etc/yum.repos.d/mysql.repo &>>$LOGFILE
+cp /home/centos/roboshop-documentation/mysql.repo /etc/yum.repos.d/mysql.repo &>>$LOGFILE
 VALIDATE $? "Copying the file mysql.repo"
 
 yum install mysql-community-server -y &>>$LOGFILE
@@ -48,6 +48,3 @@ VALIDATE $? "Starting mysqld"
 
 mysql_secure_installation --set-root-pass RoboShop@1 &>>$LOGFILE
 VALIDATE $? "Setting the Root password"
-
-mysql -uroot -pRoboShop@1 &>>$LOGFILE
-VALIDATE $? "Checking the new password"

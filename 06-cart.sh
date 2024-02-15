@@ -6,7 +6,7 @@ SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
-IDROBO=$(id -u roboshop)
+IDROBO=$(id roboshop)
 
 R="\e[31m"
 G="\e[32m"
@@ -33,6 +33,12 @@ SKIP(){
 	echo -e "$1 Exist... $Y SKIPPING $N"
 }
 
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
+VALIDATE $? "Downloading the Nodejs source"
+
+yum install nodejs -y &>>$LOGFILE
+VALIDATE $? "Installing nodejs"
+
 if [ $IDROBO -ne 0 ]
 then
     SKIP "roboshop user already exists"
@@ -41,43 +47,34 @@ else
     VALIDATE $? "Creating roboshop user"
 fi
 
-yum install zip -y &>>$LOGFILE
-VALIDATE $? "Installing zip"
-
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
-VALIDATE $? "Downloading the Nodejs source"
-
-yum install nodejs -y &>>$LOGFILE
-VALIDATE $? "Installing nodejs"
-
 if [ -d /app ]
 then
     SKIP  "Creating directory app skipping because app directory already Exists"
 else
-    mkdir /opt/app &>>$LOGFILE
+    mkdir /app &>>$LOGFILE
     VALIDATE $? "app directory not exists hence Creating it"
 fi
 
-curl -L -o /tmp/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip &>>$LOGFILE
+curl -L -o /opt/cart.zip https://roboshop-builds.s3.amazonaws.com/cart.zip &>>$LOGFILE
 VALIDATE $? "Downloading cart software"
 
-cd /opt/app &>>$LOGFILE
+cd /app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-unzip /tmp/cart.zip &>>$LOGFILE
-VALIDATE $? "unziping catalogue"
+unzip /opt/cart.zip &>>$LOGFILE
+VALIDATE $? "unziping cart"
 
 npm install &>>$LOGFILE
 VALIDATE $? "Installing dependencies"
 
-cp /home/vijay/roboshop-documentation/cart.service /etc/systemd/system/cart.service &>>$LOGFILE
+cp /home/centos/roboshop-documentation/cart.service /etc/systemd/system/cart.service &>>$LOGFILE
 VALIDATE $? "Copying the file cart.service"
 
 systemctl daemon-reload &>>$LOGFILE
 VALIDATE $? "Reloading Daemon"
 
-systemctl enable catalogue &>>$LOGFILE
+systemctl enable cart &>>$LOGFILE
 VALIDATE $? "Enabling cart"
 
-systemctl start catalogue &>>$LOGFILE
+systemctl start cart &>>$LOGFILE
 VALIDATE $? "Starting cart"

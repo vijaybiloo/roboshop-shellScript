@@ -6,7 +6,7 @@ SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
-IDROBO=$(id -u roboshop)
+IDROBO=$(id roboshop)
 
 R="\e[31m"
 G="\e[32m"
@@ -33,6 +33,12 @@ SKIP(){
 	echo -e "$1 Exist... $Y SKIPPING $N"
 }
 
+yum install maven -y &>>$LOGFILE
+VALIDATE $? "Installing mavan"
+
+yum install zip -y &>>$LOGFILE
+VALIDATE $? "Installing zip"
+
 if [ $IDROBO -ne 0 ]
 then
     SKIP "roboshop user already exists"
@@ -41,28 +47,21 @@ else
     VALIDATE $? "Creating roboshop user"
 fi
 
-yum install maven -y &>>$LOGFILE
-VALIDATE $? "Installing mavan"
-
-yum install zip -y &>>$LOGFILE
-VALIDATE $? "Installing zip"
-
-
 if [ -d /app ]
 then
     SKIP  "Creating directory app skipping because app directory already Exists"
 else
-    mkdir /opt/app &>>$LOGFILE
+    mkdir /app &>>$LOGFILE
     VALIDATE $? "app directory not exists hence Creating it"
 fi
 
-curl -L -o /tmp/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>>$LOGFILE
+curl -L -o /opt/shipping.zip https://roboshop-builds.s3.amazonaws.com/shipping.zip &>>$LOGFILE
 VALIDATE $? "Downloading shipping software"
 
-cd /opt/app &>>$LOGFILE
+cd /app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-unzip /tmp/shipping.zip &>>$LOGFILE
+unzip /opt/shipping.zip &>>$LOGFILE
 VALIDATE $? "unziping shipping"
 
 mvn clean package &>>$LOGFILE
@@ -71,7 +70,7 @@ VALIDATE $? "Cleaning packages"
 mv target/shipping-1.0.jar shipping.jar &>>$LOGFILE
 VALIDATE $? "Moving shipping to jar file"
 
-cp /home/vijay/roboshop-documentation/shipping.service /etc/systemd/system/shipping.service &>>$LOGFILE
+cp /home/centos/roboshop-documentation/shipping.service /etc/systemd/system/shipping.service &>>$LOGFILE
 VALIDATE $? "Copying the file shipping.service"
 
 systemctl daemon-reload &>>$LOGFILE

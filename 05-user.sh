@@ -5,7 +5,7 @@ DATE=$(date +%F:%H:%M:%S)
 SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
-IDROBO=$(id -u roboshop)
+IDROBO=$(id roboshop)
 
 R="\e[31m"
 G="\e[32m"
@@ -32,9 +32,6 @@ SKIP(){
 	echo -e "$1 Exist... $Y SKIPPING $N"
 }
 
-yum install zip -y &>>$LOGFILE
-VALIDATE $? "Installing zip"
-
 curl -sL https://rpm.nodesource.com/setup_lts.x | bash &>>$LOGFILE
 VALIDATE $? "Downloading the Nodejs source"
 
@@ -51,25 +48,25 @@ fi
 
 if [ -d /app ]
 then
-    SKIP "Creating directory app skipping because app directory already Exists"
+    SKIP "Skipping creating directory app, because app directory already Exists"
 else
-    mkdir /opt/app &>>$LOGFILE
+    mkdir /app &>>$LOGFILE
     VALIDATE $? "app directory not exists hence Creating it"
 fi
 
-curl -L -o /tmp/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip &>>$LOGFILE
+curl -L -o /opt/user.zip https://roboshop-builds.s3.amazonaws.com/user.zip &>>$LOGFILE
 VALIDATE $? "Downloading catalogue software"
 
-cd /opt/app &>>$LOGFILE
+cd /app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-unzip /tmp/user.zip &>>$LOGFILE
+unzip /opt/user.zip &>>$LOGFILE
 VALIDATE $? "Unziping user"
 
 npm install &>>$LOGFILE
 VALIDATE $? "Installing dependencies"
 
-cp /home/vijay/roboshop-documentation/user.service /etc/systemd/system/user.service &>>$LOGFILE
+cp /home/centos/roboshop-documentation/user.service /etc/systemd/system/user.service &>>$LOGFILE
 VALIDATE $? "Copying the file user.service"
 
 systemctl daemon-reload &>>$LOGFILE
@@ -81,7 +78,7 @@ VALIDATE $? "Enabling user"
 systemctl start user &>>$LOGFILE
 VALIDATE $? "Starting user"
 
-cp /home/vijay/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
+cp /home/centos/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
 VALIDATE $? "Copying the file mongo.repo"
 
 yum install mongodb-org-shell -y &>>$LOGFILE
