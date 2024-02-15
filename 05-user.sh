@@ -15,14 +15,14 @@ N="\e[0m"
 if [ $USERID -ne 0 ]
 then
     echo "You should be the root user to execute this command"
-    exit1
+    exit 1
 fi
 
 VALIDATE(){
     if [ $1 -ne 0 ]
     then
         echo -e "$2 ....$R FAILURE $N"
-        exit1
+        exit 1
     else
         echo -e "$2 ....$G SUCCESS $N"
     fi
@@ -38,7 +38,7 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing Nodejs"
 
-if [ $IDROBO -e 0 ]
+if [ $IDROBO -ne 0 ]
 then
     SKIP "roboshop user already exists"
 else

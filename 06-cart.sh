@@ -16,7 +16,7 @@ N="\e[0m"
 if [ $USERID -ne 0 ]
 then 
     echo "You should be the root user to execute this command"
-    exit1
+    exit 1
 fi
 
 VALIDATE(){
