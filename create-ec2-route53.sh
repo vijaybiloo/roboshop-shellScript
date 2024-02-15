@@ -1,6 +1,5 @@
 #!/bin/bash
 
-USERID=$(id -u)
 NAMES=("web-nginx" "catalogue" "mongodb" "redis" "user" "cart" "mysql" "shipping" "payment" "dispatch")
 INSTANCE_TYPE=""
 IMAGE_ID=ami-0f3c7d07486cad139
@@ -33,3 +32,4 @@ do
                         }}]
     }
     '
+done
