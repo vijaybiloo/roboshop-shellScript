@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NAMES=("web-nginx" "catalogue" "mongodb" "redis" "user" "cart" "mysql" "shipping" "payment" "dispatch")
+NAMES=("web-nginx" "catalogue" "mongodb" "redis" "user" "cart" "mysql" "shipping" "payment" "dispatch" "rabbitmq")
 INSTANCE_TYPE=""
 IMAGE_ID=ami-0f3c7d07486cad139
 SECURITY_GROUP_ID=sg-0938b20d2c338196a
