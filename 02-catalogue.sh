@@ -33,7 +33,7 @@ SKIP(){
 	echo -e "$1 Exist... $Y SKIPPING $N"
 }
 
-if [ $IDROBO == ne 0 ]
+if [ $IDROBO -ne 0 ]
 then
     SKIP "roboshop user already exists"
 
