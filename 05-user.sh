@@ -38,7 +38,7 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing Nodejs"
 
-if [ $IDROBO -ne 0 ]
+if [ $IDROBO -e 0 ]
 then
     SKIP "roboshop user already exists"
 else
