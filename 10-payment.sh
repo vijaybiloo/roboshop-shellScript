@@ -65,7 +65,7 @@ VALIDATE $? "unziping payment"
 pip3.6 install -r requirements.txt &>>$LOGFILE
 VALIDATE $? "Installing requirements"
 
-cp /home/vijay/roboshop-documentation/payment.service /etc/systemd/system/payment.service &>>$LOGFILE
+cp /home/vijay/roboshop-shellScript/payment.service /etc/systemd/system/payment.service &>>$LOGFILE
 VALIDATE $? "Copying the file payment.service"
 
 systemctl daemon-reload &>>$LOGFILE

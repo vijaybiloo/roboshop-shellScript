@@ -50,7 +50,7 @@ VALIDATE $? "changing the directory to html"
 unzip /opt/web.zip &>>$LOGFILE
 VALIDATE $? "unziping the roboshop zip file"
 
-cp /home/centos/roboshop-documentation/roboshop.conf  /etc/nginx/default.d/roboshop.conf &>>$LOGFILE
+cp /home/centos/roboshop-shellScript/roboshop.conf  /etc/nginx/default.d/roboshop.conf &>>$LOGFILE
 VALIDATE $? "Coping the roboshop.conf"
 
 systemctl restart nginx &>>$LOGFILE

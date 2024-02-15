@@ -65,7 +65,7 @@ VALIDATE $? "unziping dispatch"
 go mod init dispatch &>>$LOGFILE && go get &>>$LOGFILE && go build &>>$LOGFILE
 VALIDATE $? "downloading the dependencies & build the software"
 
-cp /home/centos/roboshop-documentation/dispatch.service /etc/systemd/system/dispatch.service &>>$LOGFILE
+cp /home/centos/roboshop-shellScript/dispatch.service /etc/systemd/system/dispatch.service &>>$LOGFILE
 VALIDATE $? "Copying the file dispatch.service"
 
 systemctl daemon-reload &>>$LOGFILE

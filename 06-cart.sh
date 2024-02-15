@@ -67,7 +67,7 @@ VALIDATE $? "unziping cart"
 npm install &>>$LOGFILE
 VALIDATE $? "Installing dependencies"
 
-cp /home/centos/roboshop-documentation/cart.service /etc/systemd/system/cart.service &>>$LOGFILE
+cp /home/centos/roboshop-shellScript/cart.service /etc/systemd/system/cart.service &>>$LOGFILE
 VALIDATE $? "Copying the file cart.service"
 
 systemctl daemon-reload &>>$LOGFILE

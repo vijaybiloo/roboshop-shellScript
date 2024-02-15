@@ -34,7 +34,7 @@ SKIP(){
 yum module disable mysql -y &>>$LOGFILE
 VALIDATE $? "Disabling mysql"
 
-cp /home/centos/roboshop-documentation/mysql.repo /etc/yum.repos.d/mysql.repo &>>$LOGFILE
+cp /home/centos/roboshop-shellScript/mysql.repo /etc/yum.repos.d/mysql.repo &>>$LOGFILE
 VALIDATE $? "Copying the file mysql.repo"
 
 yum install mysql-community-server -y &>>$LOGFILE

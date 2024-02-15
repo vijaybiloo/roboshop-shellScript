@@ -66,7 +66,7 @@ VALIDATE $? "Unziping user"
 npm install &>>$LOGFILE
 VALIDATE $? "Installing dependencies"
 
-cp /home/centos/roboshop-documentation/user.service /etc/systemd/system/user.service &>>$LOGFILE
+cp /home/centos/roboshop-shellScript/user.service /etc/systemd/system/user.service &>>$LOGFILE
 VALIDATE $? "Copying the file user.service"
 
 systemctl daemon-reload &>>$LOGFILE
@@ -78,7 +78,7 @@ VALIDATE $? "Enabling user"
 systemctl start user &>>$LOGFILE
 VALIDATE $? "Starting user"
 
-cp /home/centos/roboshop-documentation/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
+cp /home/centos/roboshop-shellScript/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOGFILE 
 VALIDATE $? "Copying the file mongo.repo"
 
 yum install mongodb-org-shell -y &>>$LOGFILE
