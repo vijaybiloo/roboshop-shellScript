@@ -85,7 +85,7 @@ VALIDATE $? "Starting shipping"
 yum install mysql -y &>>$LOGFILE
 VALIDATE $? "Installing mysql"
 
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>$LOGFILE
+mysql -h mysql.jiondevops.site -uroot -pRoboShop@1 < /app/schema/shipping.sql &>>$LOGFILE
 VALIDATE $? "Loading the schema"
 
 systemctl restart shipping &>>$LOGFILE

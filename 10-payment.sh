@@ -6,7 +6,7 @@ SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
-IDROBO=$(id -u roboshop)
+IDROBO=$(id roboshop)
 
 R="\e[31m"
 G="\e[32m"
@@ -49,17 +49,17 @@ if [ -d /app ]
 then
     SKIP  "Creating directory app skipping because app directory already Exists"
 else
-    mkdir /opt/app &>>$LOGFILE
+    mkdir /app &>>$LOGFILE
     VALIDATE $? "app directory not exists hence Creating it"
 fi
 
-curl -o /tmp/payment.zip https://roboshop-builds.s3.amazonaws.com/payment.zip &>>$LOGFILE
+curl -o /opt/payment.zip https://roboshop-builds.s3.amazonaws.com/payment.zip &>>$LOGFILE
 VALIDATE $? "Downloading payment software"
 
-cd /opt/app &>>$LOGFILE
+cd /app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-unzip /tmp/payment.zip &>>$LOGFILE
+unzip /opt/payment.zip &>>$LOGFILE
 VALIDATE $? "unziping payment"
 
 pip3.6 install -r requirements.txt &>>$LOGFILE

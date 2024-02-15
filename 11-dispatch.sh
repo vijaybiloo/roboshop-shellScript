@@ -6,7 +6,7 @@ SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
 
-IDROBO=$(id -u roboshop)
+IDROBO=$(id roboshop)
 
 R="\e[31m"
 G="\e[32m"
@@ -45,30 +45,27 @@ else
     VALIDATE $? "Creating roboshop user"
 fi
 
-yum install zip -y &>>$LOGFILE
-VALIDATE $? "Installing zip"
-
 if [ -d /app ]
 then
     SKIP  "Creating directory app skipping because app directory already Exists"
 else
-    mkdir /opt/app &>>$LOGFILE
+    mkdir /app &>>$LOGFILE
     VALIDATE $? "app directory not exists hence Creating it"
 fi
 
-curl -o /tmp/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip &>>$LOGFILE
+curl -o /opt/dispatch.zip https://roboshop-builds.s3.amazonaws.com/dispatch.zip &>>$LOGFILE
 VALIDATE $? "Downloading dispatch software"
 
-cd /opt/app &>>$LOGFILE
+cd /app &>>$LOGFILE
 VALIDATE $? "changing directory to app"
 
-unzip /tmp/dispatch.zip &>>$LOGFILE
+unzip /opt/dispatch.zip &>>$LOGFILE
 VALIDATE $? "unziping dispatch"
 
 go mod init dispatch &>>$LOGFILE && go get &>>$LOGFILE && go build &>>$LOGFILE
-VALIDATE $? "Installing dependencies"
+VALIDATE $? "downloading the dependencies & build the software"
 
-cp /home/vijay/roboshop-documentation/dispatch.service /etc/systemd/system/dispatch.service &>>$LOGFILE
+cp /home/centos/roboshop-documentation/dispatch.service /etc/systemd/system/dispatch.service &>>$LOGFILE
 VALIDATE $? "Copying the file dispatch.service"
 
 systemctl daemon-reload &>>$LOGFILE

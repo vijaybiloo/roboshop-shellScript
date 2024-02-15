@@ -40,6 +40,9 @@ VALIDATE $? "Configureing YUM Repos for RabbitMQ"
 yum install rabbitmq-server -y &>>$LOGFILE
 VALIDATE $? "Installing rabbitmq-server"
 
+systemctl enable rabbitmq-server &>>$LOGFILE
+VALIDATE $? "Enabling rabbitmq-server"
+
 systemctl start rabbitmq-server &>>$LOGFILE
 VALIDATE $? "Starting rabbitmq-server"
 
