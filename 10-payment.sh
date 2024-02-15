@@ -39,10 +39,10 @@ VALIDATE $? "Installing python36 and gcc python3-devel"
 
 if [ $IDROBO -ne 0 ]
 then
-    SKIP "roboshop user already exists"
-else
     useradd roboshop &>>$LOGFILE
     VALIDATE $? "Creating roboshop user"
+else
+    echo "roboshop user already exists"
 fi
 
 if [ -d /app ]
@@ -65,7 +65,7 @@ VALIDATE $? "unziping payment"
 pip3.6 install -r requirements.txt &>>$LOGFILE
 VALIDATE $? "Installing requirements"
 
-cp /home/vijay/roboshop-shellScript/payment.service /etc/systemd/system/payment.service &>>$LOGFILE
+cp /home/centos/roboshop-shellScript/payment.service /etc/systemd/system/payment.service &>>$LOGFILE
 VALIDATE $? "Copying the file payment.service"
 
 systemctl daemon-reload &>>$LOGFILE

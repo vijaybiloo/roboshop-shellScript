@@ -41,10 +41,10 @@ VALIDATE $? "Installing nodejs"
 
 if [ $IDROBO -ne 0 ]
 then
-    SKIP "roboshop user already exists"
-else
     useradd roboshop &>>$LOGFILE
     VALIDATE $? "Creating roboshop user"
+else
+    echo "roboshop user already exists"
 fi
 
 if [ -d /app ]
