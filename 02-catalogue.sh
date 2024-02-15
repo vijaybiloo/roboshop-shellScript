@@ -36,11 +36,9 @@ SKIP(){
 if [ $IDROBO -ne 0 ]
 then
     SKIP "roboshop user already exists"
-
 else
     useradd roboshop &>>$LOGFILE
     VALIDATE $? "Creating roboshop user"
-
 fi
 
 yum install zip -y &>>$LOGFILE
