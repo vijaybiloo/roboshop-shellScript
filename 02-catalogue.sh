@@ -89,5 +89,5 @@ VALIDATE $? "Copying the file mongo.repo"
 yum install mongodb-org-shell -y &>>$LOGFILE
 VALIDATE $? "Installing mongo-org-shell"
 
-mongo --host mongodb.jiondevops.site </tmp/app/schema/catalogue.js &>>$LOGFILE
+mongo --host mongodb.jiondevops.site </app/schema/catalogue.js &>>$LOGFILE
 VALIDATE $? "Loading schema"
