@@ -5,7 +5,6 @@ DATE=$(date +%F:%H:%M:%S)
 SCRIPT=$0
 LOGDIR=/tmp
 LOGFILE=$LOGDIR/$DATE-$SCRIPT.log
-
 IDROBO=$(id roboshop)
 
 R="\e[31m"
@@ -37,12 +36,12 @@ yum install golang -y &>>$LOGFILE
 VALIDATE $? "Installing golang"
 
 
-if [ $IDROBO -ne 0 ]
+if [ $IDROBO -eq 0 ] &>>$LOGFILE
 then
-    sudo useradd roboshop &>>$LOGFILE
-    VALIDATE $? "Creating roboshop user"
+    SKIP "user exist!"
 else
-    echo "roboshop user already exists"
+    echo "Creating user"
+    useradd roboshop &>>$LOGFILE  
 fi
 
 if [ -d /app ]
