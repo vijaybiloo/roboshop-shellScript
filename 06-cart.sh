@@ -41,7 +41,7 @@ VALIDATE $? "Installing nodejs"
 
 if [ $IDROBO -ne 0 ]
 then
-    useradd roboshop &>>$LOGFILE
+    sudo useradd roboshop &>>$LOGFILE
     VALIDATE $? "Creating roboshop user"
 else
     echo "roboshop user already exists"
