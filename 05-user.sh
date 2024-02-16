@@ -38,12 +38,12 @@ VALIDATE $? "Downloading the Nodejs source"
 yum install nodejs -y &>>$LOGFILE
 VALIDATE $? "Installing Nodejs"
 
-if [ $IDROBO -ne 0 ]
+if [ $IDROBO -eq 0 ] &>>$LOGFILE
 then
-    sudo useradd roboshop &>>$LOGFILE
-    VALIDATE $? "Creating roboshop user"
+    SKIP "user exist!"
 else
-    echo "roboshop user already exists"
+    echo "Creating user"
+    useradd roboshop &>>$LOGFILE  
 fi
 
 if [ -d /app ]
